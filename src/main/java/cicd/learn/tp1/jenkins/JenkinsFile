@@ -19,6 +19,7 @@ pipeline {
             steps {
                 echo 'Deploying....'
                 bat 'mvn package'
+                bat 'mvn checkstyle:checkstyle'
                 archiveArtifacts artifacts: 'target/*.jar'
             }
         }
