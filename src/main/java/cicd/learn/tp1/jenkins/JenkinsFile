@@ -5,28 +5,19 @@ pipeline {
             steps {
                 echo 'Building..'
                 bat 'mvn clean'
-                bat 'mvn compile'
-            }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-                bat 'mvn test'
+                bat 'mvn package'
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
-                bat 'mvn package'
                 bat 'mvn checkstyle:checkstyle'
                 archiveArtifacts artifacts: 'target/*.jar'
-                archiveArtifacts artifacts: 'target/*xml'
             }
         }
 }
 post {
             always{
-                junit 'target/surefire-report/*.xml'
+                junit '**/target/surefire-report/*.xml'
                 recordIssues enabledForFailure: true, tools : [mavenConsole(),java(),javaDoc()]
                 recordIssues enabledForFailure: true, tool : checkstyle()
                 recordIssues enabledForFailure: true, tool : spotBugs()
