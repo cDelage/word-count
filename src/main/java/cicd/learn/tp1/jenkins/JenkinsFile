@@ -1,6 +1,5 @@
 pipeline {
     agent any
-
     stages {
         stage('Build') {
             steps {
@@ -24,7 +23,8 @@ pipeline {
                 archiveArtifacts artifacts: 'target/*xml'
             }
         }
-        post {
+}
+post {
             always{
                 junit '**/surefire-report.xml'
                 recordIssues enabledForFailure: true, tools : [mavenConsole(),java(),javaDoc()]
@@ -35,4 +35,3 @@ pipeline {
             }
         }
     }
-}
